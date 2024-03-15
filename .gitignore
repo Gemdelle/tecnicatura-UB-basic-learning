@@ -1,0 +1,18 @@
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+
+# Ignore IntelliJ IDEA files
+.idea/
+
+# Ignore macOS system files
+.DS_Store
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Compiled Python files
+*.pyo
+*.pyd
