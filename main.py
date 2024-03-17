@@ -1,9 +1,29 @@
 import pygame
+import tkinter as tk
 
 from sys import exit
 
 from core.screens import Screens
+from ui.screens.field.field_1 import render_field_1
+from ui.screens.field.field_2 import render_field_2
+from ui.screens.field.field_3 import render_field_3
+from ui.screens.field.field_4 import render_field_4
+from ui.screens.light_woods.light_woods_1 import render_light_woods_1
+from ui.screens.light_woods.light_woods_2 import render_light_woods_2
+from ui.screens.light_woods.light_woods_3 import render_light_woods_3
+from ui.screens.light_woods.light_woods_4 import render_light_woods_4
+from ui.screens.light_woods.light_woods_5 import render_light_woods_5
+from ui.screens.light_woods.light_woods_6 import render_light_woods_6
+from ui.screens.map.map_1 import render_map_1
+from ui.screens.map.map_2 import render_map_2
+from ui.screens.map.map_3 import render_map_3
+from ui.screens.map.map_4 import render_map_4
+from ui.screens.map.map_5 import render_map_5
 from ui.screens.splash import render_splash
+from ui.screens.water_woods.water_woods_1 import render_water_woods_1
+from ui.screens.water_woods.water_woods_2 import render_water_woods_2
+from ui.screens.water_woods.water_woods_3 import render_water_woods_3
+from ui.screens.water_woods.water_woods_4 import render_water_woods_4
 
 # Setup
 pygame.init()
@@ -17,13 +37,14 @@ pygame.display.set_caption('PyEvolve')
 clock = pygame.time.Clock()
 game_active = True
 running = True
+root = tk.Tk()
 
-screen_selected = Screens.SPLASH
+screen_selected = Screens.FIELD_1
 
 button_font_manager = pygame.font.Font('font/Alkhemikal.ttf', 25)
 
 def listen_to_key_binding():
-    global event, running, screen_selected
+    global running, screen_selected
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -144,43 +165,43 @@ while running:
         if screen_selected == Screens.SPLASH:
             render_splash(screen, go_to_map_1)
         elif screen_selected == Screens.MAP_1:
-            render_main(screen, go_to_map_2, go_to_map_3, go_to_map_4, go_to_map_5)
+            render_map_1(screen, go_to_map_2, go_to_map_3, go_to_map_4, go_to_map_5)
         elif screen_selected == Screens.MAP_2:
-            render_main(screen, go_to_map_1, go_to_field_1)
+            render_map_2(screen, go_to_map_1, go_to_field_1)
         elif screen_selected == Screens.MAP_3:
-            render_main(screen, go_to_map_1, go_to_field_1)
+            render_map_3(screen, go_to_map_1, go_to_field_1)
         elif screen_selected == Screens.MAP_4:
-            render_main(screen, go_to_map_1, go_to_field_1)
+            render_map_4(screen, go_to_map_1, go_to_field_1)
         elif screen_selected == Screens.MAP_5:
-            render_main(screen, go_to_map_1, go_to_field_1)
+            render_map_5(screen, go_to_map_1, go_to_field_1)
         elif screen_selected == Screens.FIELD_1:
-            render_main(screen, go_to_field_2)
+            render_field_1(screen, root, go_to_field_2)
         elif screen_selected == Screens.FIELD_2:
-            render_main(screen, go_to_field_1, go_to_field_3)
+            render_field_2(screen, go_to_field_1, go_to_field_3)
         elif screen_selected == Screens.FIELD_3:
-            render_main(screen, go_to_field_2, go_to_field_4)
+            render_field_3(screen, go_to_field_2, go_to_field_4)
         elif screen_selected == Screens.FIELD_4:
-            render_main(screen, go_to_field_3, go_to_light_woods_1)
+            render_field_4(screen, go_to_field_3, go_to_light_woods_1)
         elif screen_selected == Screens.LIGHT_WOODS_1:
-            render_main(screen, go_to_light_woods_2, go_to_light_woods_3, go_to_light_woods_4, go_to_light_woods_5)
+            render_light_woods_1(screen, go_to_light_woods_2, go_to_light_woods_3, go_to_light_woods_4, go_to_light_woods_5)
         elif screen_selected == Screens.LIGHT_WOODS_2:
-            render_main(screen, go_to_light_woods_1)
+            render_light_woods_2(screen, go_to_light_woods_1)
         elif screen_selected == Screens.LIGHT_WOODS_3:
-            render_main(screen, go_to_light_woods_1)
+            render_light_woods_3(screen, go_to_light_woods_1)
         elif screen_selected == Screens.LIGHT_WOODS_4:
-            render_main(screen, go_to_light_woods_1)
+            render_light_woods_4(screen, go_to_light_woods_1)
         elif screen_selected == Screens.LIGHT_WOODS_5:
-            render_main(screen, go_to_light_woods_1, go_to_light_woods_6)
+            render_light_woods_5(screen, go_to_light_woods_1, go_to_light_woods_6)
         elif screen_selected == Screens.LIGHT_WOODS_6:
-            render_main(screen, go_to_light_woods_5, go_to_water_woods_1)
+            render_light_woods_6(screen, go_to_light_woods_5, go_to_water_woods_1)
         elif screen_selected == Screens.WATER_WOODS_1:
-            render_main(screen, go_to_water_woods_2)
+            render_water_woods_1(screen, go_to_water_woods_2)
         elif screen_selected == Screens.WATER_WOODS_2:
-            render_main(screen, go_to_water_woods_1, go_to_water_woods_2, go_to_water_woods_3, go_to_water_woods_4)
+            render_water_woods_2(screen, go_to_water_woods_1, go_to_water_woods_2, go_to_water_woods_3, go_to_water_woods_4)
         elif screen_selected == Screens.WATER_WOODS_3:
-            render_main(screen, go_to_water_woods_2, go_to_finish_screen)
+            render_water_woods_3(screen, go_to_water_woods_2, go_to_finish_screen)
         elif screen_selected == Screens.WATER_WOODS_4:
-            render_main(screen, go_to_water_woods_2, go_to_finish_screen)
+            render_water_woods_4(screen, go_to_water_woods_2, go_to_finish_screen)
 
 
         else:
@@ -188,3 +209,4 @@ while running:
 
     pygame.display.update()
     clock.tick(60)
+

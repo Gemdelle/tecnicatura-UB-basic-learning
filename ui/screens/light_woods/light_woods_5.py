@@ -8,6 +8,6 @@ def draw_button(x, y, width, height, text, button_color, text_color, screen):
 
     screen.blit(text_surface, text_rect)
     return text_rect
-def render_map_1(screen,go_to_map_2, go_to_map_3, go_to_map_4, go_to_map_5):
+def render_light_woods_5(screen):
     screen.fill((255, 255, 255))
-    draw_button(800, 500, 350, 50, "MAP 1", (225, 224, 204), 'White', screen)
+    draw_button(800, 500, 350, 50, "LIGHT WOODS 5", (225, 224, 204), 'White', screen)
