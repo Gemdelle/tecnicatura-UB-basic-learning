@@ -1,12 +1,11 @@
 import os
-import tkinter as tk
-from tkinter import scrolledtext
 
 import pygame
 import io
 import sys
 
 from ui.components.avatar_frame import AvatarFrame
+from ui.components.button import Button
 from ui.components.dialog_text import DialogText
 from ui.components.frame import Frame
 
@@ -24,31 +23,35 @@ typing_speed = 10
 herbs_count = 3
 flowers_count = 3
 
-input_text = ('# direction = "north"\n# move = false\nhierbas = 1')
-input_active = False
+code_text = [
+    '# direction = "north"',
+    '# move = false',
+    'hierbas = 1'
+]
+validation_code_text = ['print(hierbas == 3)']
 
-code_text = None
+cursor = 0
+active = True
 
-def on_unmap(event, root):
-    root.grab_set()
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS2
+    except Exception:
+        base_path = os.path.abspath(".")
 
-def release_grab(event=None, root=None):
-    root.grab_release()
+    return os.path.join(base_path, relative_path)
 
-
-class ConsoleRedirector:
-    def __init__(self, text_widget):
-        self.text_widget = text_widget
-
-    def write(self, message):
-        self.text_widget.insert(tk.END, message)
-        self.text_widget.see(tk.END)
-def execute_code():
-    global input_text, input_active
-    if code_text is None:
+def execute_code(go_to_field_2):
+    global code_text
+    if code_text == "":
         return
+    code_to_validate = code_text.copy()
+    for code in validation_code_text:
+        code_to_validate.append(code)
 
-    code_to_execute = code_text.get("1.0", tk.END)
+    code_to_execute = "\n".join(code_to_validate)
     # Create a StringIO object to capture printed output
     captured_output = io.StringIO()
     # Redirect stdout to the StringIO object
@@ -62,23 +65,54 @@ def execute_code():
         # Restore stdout
         sys.stdout = sys.__stdout__
     # Get the captured output
-    output = captured_output.getvalue()
+    output = captured_output.getvalue().replace("\n", "")
     # Close the StringIO object
     captured_output.close()
+    if output == "True":
+        go_to_field_2()
 
 
-def render_field_1(screen, root, go_to_field_2):
-    global typed_text_phase_1_1, typed_text_phase_1_2, typed_text_phase_1_3, text_to_type_phase_1_1, text_to_type_phase_1_2, text_to_type_phase_1_3, code_text
+def save_code(text):
+    global code_text
+    code_text[-1] += text
+
+def erase_code():
+    global code_text
+    code_text[-1] = code_text[-1][:-1]
+    if len(code_text[-1]) == 0:
+        if len(code_text) > 1:
+            code_text = code_text[:-1]
+
+def line_break():
+    code_text.append("")
+
+def render_field_1(screen, go_to_field_2):
+    global typed_text_phase_1_1, typed_text_phase_1_2, typed_text_phase_1_3, text_to_type_phase_1_1, text_to_type_phase_1_2, text_to_type_phase_1_3, code_text, active,cursor
+    code_area = pygame.image.load(resource_path("assets\\fields\\coding-area.png")).convert()
+    code_frame = Frame(screen, 50, 350, 600, 700, (100, 100, 100), code_area)
+    code_button = Button(screen, 300, 950, 100,60, "Run", (0, 0, 0),"White", lambda: execute_code(go_to_field_2))
+    code_button.check_click()
+    code_frame.add_element(code_button)
+
+    if cursor % 4 == 0 and active and code_text[-1]:
+        code_text[-1] += "|"
+    cursor += 1
+    for row, line in enumerate(code_text):
+        code_text_component = DialogText(screen, 60, 360 + (row * 40), 500, 600, line)
+        code_frame.add_element(code_text_component)
 
     # BACKGROUND #
-    background_image = pygame.image.load("assets/background_field_1.png").convert()
+    background_image = pygame.image.load(resource_path("assets\\background_field_1.png")).convert()
     background_rect = background_image.get_rect()
     scaled_image = pygame.transform.scale(background_image, (1920 , 1080))
     screen.blit(scaled_image, background_rect)
 
     # DIALOG FRAME + AVATAR FRAME #
-    frame = Frame(screen, 50, 50, 1750, 300, (100, 100, 100))
-    avatar_frame = AvatarFrame(screen, 1700, 100, 10, 370, (0, 0, 0))
+    dialog_frame = pygame.image.load(resource_path("assets\\fields\\instructions.png")).convert()
+    frame = Frame(screen, 50, 30, 1756, 266, (100, 100, 100), dialog_frame)
+
+    avatar_frame_img = pygame.image.load(resource_path("assets\\fields\\face-frame.png")).convert()
+    avatar_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_frame_img)
     frame.add_element(avatar_frame)
 
     dialog_text_phase_1_1 = DialogText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
@@ -106,34 +140,13 @@ def render_field_1(screen, root, go_to_field_2):
                 typed_text_phase_1_3 += text_to_type_phase_1_3[0]
                 text_to_type_phase_1_3 = text_to_type_phase_1_3[1:]
             if not text_to_type_phase_1_3:
-                # Make the window transient to prevent focusing issues
-                root.attributes("-toolwindow", True)
-                root.transient()
-                # Set window geometry (size and position)
-                root.geometry(f"{600}x{700}+{50}+{350}")
-                # Disable window resizing
-                root.resizable(False, False)
-                # Disable window dragging
-                root.overrideredirect(True)
-
-                # Create a scrolled text area for code input
-                code_text = scrolledtext.ScrolledText(root, width=500, height=60)
-                code_text.pack(padx=10, pady=10)
-                # Create a button to run the code
-                run_button = tk.Button(root, text="Run Code", command=execute_code)
-                run_button.pack(pady=10)
-                # Bind events to handle window visibility
-                root.bind("<Unmap>", lambda event: on_unmap(event, root))
-                root.protocol("WM_DELETE_WINDOW", lambda event: release_grab(event, root))
-                # Make the window modal
-                root.focus_force()
-                # Run the Tkinter event loop
-                root.mainloop()
-                root.update()
-                os.environ['SDL_WINDOWID'] = str(code_text.winfo_id())
-                os.environ['SDL_VIDEODRIVER'] = 'windib'
-                while True:
-                    pygame.display.update()
-                    root.update()
+                print(code_text)
 
     frame.draw()
+    code_frame.draw()
+
+    try:
+        if code_text[-1][-1] == "|":
+            code_text[-1] = code_text[-1][:-1]
+    except:
+        pass

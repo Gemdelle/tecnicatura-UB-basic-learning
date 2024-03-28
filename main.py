@@ -1,10 +1,12 @@
+import os
+import sys
+
 import pygame
-import tkinter as tk
 
 from sys import exit
 
 from core.screens import Screens
-from ui.screens.field.field_1 import render_field_1
+from ui.screens.field.field_1 import render_field_1, save_code, erase_code, line_break
 from ui.screens.field.field_2 import render_field_2
 from ui.screens.field.field_3 import render_field_3
 from ui.screens.field.field_4 import render_field_4
@@ -37,21 +39,36 @@ pygame.display.set_caption('PyEvolve')
 clock = pygame.time.Clock()
 game_active = True
 running = True
-root = tk.Tk()
 
 screen_selected = Screens.FIELD_1
 
-button_font_manager = pygame.font.Font('font/Alkhemikal.ttf', 25)
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS2
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+button_font_manager = pygame.font.Font(resource_path('font\\Alkhemikal.ttf'), 25)
 
 def listen_to_key_binding():
     global running, screen_selected
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.TEXTINPUT:
+            save_code(event.text)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
+            elif event.key == pygame.K_BACKSPACE:
+                erase_code()
+            elif event.key == pygame.K_RETURN:
+                line_break()
 
 # MAP NAVIGATION #
 def go_to_map_1():
@@ -175,7 +192,7 @@ while running:
         elif screen_selected == Screens.MAP_5:
             render_map_5(screen, go_to_map_1, go_to_field_1)
         elif screen_selected == Screens.FIELD_1:
-            render_field_1(screen, root, go_to_field_2)
+            render_field_1(screen, go_to_field_2)
         elif screen_selected == Screens.FIELD_2:
             render_field_2(screen, go_to_field_1, go_to_field_3)
         elif screen_selected == Screens.FIELD_3:

@@ -8,6 +8,6 @@ def draw_button(x, y, width, height, text, button_color, text_color, screen):
 
     screen.blit(text_surface, text_rect)
     return text_rect
-def render_field_2(screen):
+def render_field_2(screen, go_to_field_1, go_to_field_3):
     screen.fill((255, 255, 255))
     draw_button(800, 500, 350, 50, "FIELD 2", (225, 224, 204), 'White', screen)
