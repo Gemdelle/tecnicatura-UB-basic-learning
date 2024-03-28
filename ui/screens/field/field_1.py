@@ -88,7 +88,7 @@ def line_break():
 
 def render_field_1(screen, go_to_field_2):
     global typed_text_phase_1_1, typed_text_phase_1_2, typed_text_phase_1_3, text_to_type_phase_1_1, text_to_type_phase_1_2, text_to_type_phase_1_3, code_text, active,cursor
-    code_area = pygame.image.load(resource_path("assets\\fields\\coding-area.png")).convert()
+    code_area = pygame.image.load(resource_path("assets\\fields\\coding-area.png")).convert_alpha()
     code_frame = Frame(screen, 50, 350, 600, 700, (100, 100, 100), code_area)
     code_button = Button(screen, 300, 950, 100,60, "Run", (0, 0, 0),"White", lambda: execute_code(go_to_field_2))
     code_button.check_click()
@@ -102,16 +102,16 @@ def render_field_1(screen, go_to_field_2):
         code_frame.add_element(code_text_component)
 
     # BACKGROUND #
-    background_image = pygame.image.load(resource_path("assets\\background_field_1.png")).convert()
+    background_image = pygame.image.load(resource_path("assets\\fields\\00-home.png")).convert_alpha()
     background_rect = background_image.get_rect()
     scaled_image = pygame.transform.scale(background_image, (1920 , 1080))
     screen.blit(scaled_image, background_rect)
 
     # DIALOG FRAME + AVATAR FRAME #
-    dialog_frame = pygame.image.load(resource_path("assets\\fields\\instructions.png")).convert()
+    dialog_frame = pygame.image.load(resource_path("assets\\fields\\instructions.png")).convert_alpha()
     frame = Frame(screen, 50, 30, 1756, 266, (100, 100, 100), dialog_frame)
 
-    avatar_frame_img = pygame.image.load(resource_path("assets\\fields\\face-frame.png")).convert()
+    avatar_frame_img = pygame.image.load(resource_path("assets\\fields\\face-frame.png")).convert_alpha()
     avatar_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_frame_img)
     frame.add_element(avatar_frame)
 
