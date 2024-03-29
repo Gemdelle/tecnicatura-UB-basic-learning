@@ -138,15 +138,15 @@ def render_field_1(screen, go_to_field_2):
     frame.add_element(avatar_frame)
 
     if field_1_character_status == Field1CharacterStatus.HAPPY:
-        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-happy-character.png")).convert_alpha()
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields\\01-field-happy.png")).convert_alpha()
         avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
     elif field_1_character_status == Field1CharacterStatus.SAD:
-        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-sad-character.png")).convert_alpha()
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields\\01-field-sad.png")).convert_alpha()
         avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
     else:
-        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-character.png")).convert_alpha()
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields\\01-field-default.png")).convert_alpha()
         avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
 
