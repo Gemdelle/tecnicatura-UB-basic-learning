@@ -22,7 +22,14 @@ class Button:
         self.action = action
 
     def draw(self):
-        pygame.draw.rect(self.screen, self.color, self.rect)
+        mouse_buttons = pygame.mouse.get_pressed()
+        mouse_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse_pos):
+            if mouse_buttons[0]:
+                pygame.draw.rect(self.screen, (200, 200, 200), self.rect)
+        else:
+            pygame.draw.rect(self.screen, self.color, self.rect)
+
         pygame.draw.rect(self.screen, (0, 0, 0), self.rect, 2)
 
         text_surface = pygame.font.Font(resource_path('font\\Alkhemikal.ttf'), 25).render(self.text, True, self.text_color)
@@ -32,7 +39,10 @@ class Button:
 
     def check_click(self):
         mouse_buttons = pygame.mouse.get_pressed()
-        if mouse_buttons[0]:
-            mouse_pos = pygame.mouse.get_pos()
-            if self.rect.collidepoint(mouse_pos):
+        mouse_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse_pos):
+            pygame.mouse.set_cursor(pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_HAND))
+            if mouse_buttons[0]:
                 self.action()
+        else:
+            pygame.mouse.set_cursor(pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_ARROW))

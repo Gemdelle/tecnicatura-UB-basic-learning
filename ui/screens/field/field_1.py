@@ -4,10 +4,15 @@ import pygame
 import io
 import sys
 
+from core.field_1_character_status import Field1CharacterStatus
 from ui.components.avatar_frame import AvatarFrame
 from ui.components.button import Button
 from ui.components.dialogue_text import DialogueText
 from ui.components.frame import Frame
+
+text_to_type_phase_1_1_backup = "Aprendí hace poco a contar y no sé si me confundí."
+text_to_type_phase_1_2_backup = "- Verificar que la cantidad de hierbas sea la correcta."
+text_to_type_phase_1_3_backup = "- Declarar la variable flores asignándole el valor que corresponde."
 
 text_to_type_phase_1_1 = "Aprendí hace poco a contar y no sé si me confundí."
 text_to_type_phase_1_2 = "- Verificar que la cantidad de hierbas sea la correcta."
@@ -17,6 +22,14 @@ typed_text_phase_1_1 = ""
 typed_text_phase_1_2 = ""
 typed_text_phase_1_3 = ""
 
+text_to_type_sad_phase_1_1_backup = "No te equivoques kpo por favor"
+text_to_type_sad_phase_1_1 = "No te equivoques kpo por favor"
+typed_text_sad_phase_1_1 = ""
+
+text_to_type_happy_phase_1_1_backup = "Bien ahi maquina, pasaste la prueba"
+text_to_type_happy_phase_1_1 = "Bien ahi maquina, pasaste la prueba"
+typed_text_happy_phase_1_1 = ""
+
 # Typing speed (characters per second)
 typing_speed = 10
 
@@ -24,14 +37,13 @@ herbs_count = 3
 flowers_count = 3
 
 code_text = [
-    '# direction = "north"',
-    '# move = false',
     'hierbas = 1'
 ]
 validation_code_text = ['print(hierbas == 3)']
 
 cursor = 0
 active = True
+field_1_character_status = Field1CharacterStatus.DEFAULT
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -43,8 +55,9 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-def execute_code(go_to_field_2):
-    global code_text
+
+def execute_code():
+    global code_text, field_1_character_status
     if code_text == "":
         return
     code_to_validate = code_text.copy()
@@ -69,8 +82,10 @@ def execute_code(go_to_field_2):
     # Close the StringIO object
     captured_output.close()
     if output == "True":
-        go_to_field_2()
-
+        field_1_character_status = Field1CharacterStatus.HAPPY
+        #go_to_field_2()
+    else:
+        field_1_character_status = Field1CharacterStatus.SAD
 
 def save_code(text):
     global code_text
@@ -87,14 +102,21 @@ def line_break():
     code_text.append("")
 
 def render_field_1(screen, go_to_field_2):
-    global typed_text_phase_1_1, typed_text_phase_1_2, typed_text_phase_1_3, text_to_type_phase_1_1, text_to_type_phase_1_2, text_to_type_phase_1_3, code_text, active,cursor
+    global text_to_type_happy_phase_1_1,typed_text_happy_phase_1_1,field_1_character_status, text_to_type_sad_phase_1_1, typed_text_phase_1_1, typed_text_phase_1_2, typed_text_phase_1_3, text_to_type_phase_1_1, text_to_type_phase_1_2, text_to_type_phase_1_3, code_text, active,cursor, typed_text_sad_phase_1_1
     code_area = pygame.image.load(resource_path("assets\\fields\\coding-area.png")).convert_alpha()
     code_frame = Frame(screen, 50, 350, 600, 700, (100, 100, 100), code_area)
-    code_button = Button(screen, 300, 950, 100,60, "Run", (0, 0, 0),"White", lambda: execute_code(go_to_field_2))
-    code_button.check_click()
-    code_frame.add_element(code_button)
 
-    if cursor % 4 == 0 and active and code_text[-1]:
+    if field_1_character_status == Field1CharacterStatus.HAPPY:
+        code_button = Button(screen, 300, 950, 100, 60, "Next", (0, 0, 0), "White", lambda: go_to_field_2())
+        code_button.check_click()
+        code_frame.add_element(code_button)
+    else:
+        code_button = Button(screen, 300, 950, 100,60, "Run", (0, 0, 0),"White", lambda: execute_code())
+        code_button.check_click()
+        code_frame.add_element(code_button)
+
+
+    if cursor % 4 == 0 and active and code_text[-1] and not field_1_character_status == Field1CharacterStatus.HAPPY:
         code_text[-1] += "|"
     cursor += 1
     for row, line in enumerate(code_text):
@@ -115,36 +137,86 @@ def render_field_1(screen, go_to_field_2):
     avatar_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_frame_img)
     frame.add_element(avatar_frame)
 
-    dialogue_text_phase_1_1 = DialogueText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
-    frame.add_element(dialogue_text_phase_1_1)
-    dialogue_text_phase_1_2 = DialogueText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
-    frame.add_element(dialogue_text_phase_1_2)
-    dialogue_text_phase_1_3 = DialogueText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
+    if field_1_character_status == Field1CharacterStatus.HAPPY:
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-happy-character.png")).convert_alpha()
+        avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
+        frame.add_element(avatar_img_frame)
+    elif field_1_character_status == Field1CharacterStatus.SAD:
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-sad-character.png")).convert_alpha()
+        avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
+        frame.add_element(avatar_img_frame)
+    else:
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-character.png")).convert_alpha()
+        avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
+        frame.add_element(avatar_img_frame)
 
-    frame.add_element(dialogue_text_phase_1_3)
+    dialog_text_phase_1_1 = DialogueText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
+    frame.add_element(dialog_text_phase_1_1)
+    dialog_text_phase_1_2 = DialogueText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
+    frame.add_element(dialog_text_phase_1_2)
+    dialog_text_phase_1_3 = DialogueText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
+    frame.add_element(dialog_text_phase_1_3)
+
+    dialog_text_sad_phase_1_1 = DialogueText(screen, 120, 150, 500, 300, typed_text_sad_phase_1_1)
+    frame.add_element(dialog_text_sad_phase_1_1)
+
+    dialog_text_happy_phase_1_1 = DialogueText(screen, 120, 150, 500, 300, typed_text_happy_phase_1_1)
+    frame.add_element(dialog_text_happy_phase_1_1)
 
     # Delay for the typing speed
     pygame.time.delay(int(1000 / typing_speed))
 
-    if text_to_type_phase_1_1:
-        typed_text_phase_1_1 += text_to_type_phase_1_1[0]
-        text_to_type_phase_1_1 = text_to_type_phase_1_1[1:]
+    if field_1_character_status == Field1CharacterStatus.SAD:
+        typed_text_phase_1_1 = ""
+        typed_text_phase_1_2 = ""
+        typed_text_phase_1_3 = ""
+        text_to_type_phase_1_1 = text_to_type_phase_1_1_backup
+        text_to_type_phase_1_2 = text_to_type_phase_1_2_backup
+        text_to_type_phase_1_3 = text_to_type_phase_1_3_backup
 
-    if not text_to_type_phase_1_1:
-        if text_to_type_phase_1_2:
-            typed_text_phase_1_2 += text_to_type_phase_1_2[0]
-            text_to_type_phase_1_2 = text_to_type_phase_1_2[1:]
+        if text_to_type_sad_phase_1_1:
+            typed_text_sad_phase_1_1 += text_to_type_sad_phase_1_1[0]
+            text_to_type_sad_phase_1_1 = text_to_type_sad_phase_1_1[1:]
+        if not text_to_type_sad_phase_1_1:
+            field_1_character_status = Field1CharacterStatus.DEFAULT
 
-        if not text_to_type_phase_1_2:
-            if text_to_type_phase_1_3:
-                typed_text_phase_1_3 += text_to_type_phase_1_3[0]
-                text_to_type_phase_1_3 = text_to_type_phase_1_3[1:]
-            if not text_to_type_phase_1_3:
-                print(code_text)
+    elif field_1_character_status == Field1CharacterStatus.HAPPY:
+        typed_text_phase_1_1 = ""
+        typed_text_phase_1_2 = ""
+        typed_text_phase_1_3 = ""
+        text_to_type_phase_1_1 = text_to_type_phase_1_1_backup
+        text_to_type_phase_1_2 = text_to_type_phase_1_2_backup
+        text_to_type_phase_1_3 = text_to_type_phase_1_3_backup
+        typed_text_sad_phase_1_1 = ""
+        text_to_type_sad_phase_1_1 = text_to_type_sad_phase_1_1_backup
+
+        if text_to_type_happy_phase_1_1:
+            typed_text_happy_phase_1_1 += text_to_type_happy_phase_1_1[0]
+            text_to_type_happy_phase_1_1 = text_to_type_happy_phase_1_1[1:]
+        if not text_to_type_happy_phase_1_1:
+            pass
+    else:
+        typed_text_sad_phase_1_1 = ""
+        text_to_type_sad_phase_1_1 = text_to_type_sad_phase_1_1_backup
+
+        if text_to_type_phase_1_1:
+            typed_text_phase_1_1 += text_to_type_phase_1_1[0]
+            text_to_type_phase_1_1 = text_to_type_phase_1_1[1:]
+
+        if not text_to_type_phase_1_1:
+            if text_to_type_phase_1_2:
+                typed_text_phase_1_2 += text_to_type_phase_1_2[0]
+                text_to_type_phase_1_2 = text_to_type_phase_1_2[1:]
+
+            if not text_to_type_phase_1_2:
+                if text_to_type_phase_1_3:
+                    typed_text_phase_1_3 += text_to_type_phase_1_3[0]
+                    text_to_type_phase_1_3 = text_to_type_phase_1_3[1:]
+                if not text_to_type_phase_1_3:
+                    pass
 
     frame.draw()
     code_frame.draw()
-
     try:
         if code_text[-1][-1] == "|":
             code_text[-1] = code_text[-1][:-1]
