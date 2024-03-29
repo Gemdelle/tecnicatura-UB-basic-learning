@@ -4,6 +4,7 @@ import pygame
 import io
 import sys
 
+from core.field_1_character_status import Field1CharacterStatus
 from ui.components.avatar_frame import AvatarFrame
 from ui.components.button import Button
 from ui.components.dialogue_text import DialogueText
@@ -24,14 +25,13 @@ herbs_count = 3
 flowers_count = 3
 
 code_text = [
-    '# direction = "north"',
-    '# move = false',
     'hierbas = 1'
 ]
 validation_code_text = ['print(hierbas == 3)']
 
 cursor = 0
 active = True
+field_1_character_status = Field1CharacterStatus.DEFAULT
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -44,7 +44,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def execute_code(go_to_field_2):
-    global code_text
+    global code_text, field_1_character_status
     if code_text == "":
         return
     code_to_validate = code_text.copy()
@@ -69,7 +69,8 @@ def execute_code(go_to_field_2):
     # Close the StringIO object
     captured_output.close()
     if output == "True":
-        go_to_field_2()
+        field_1_character_status = Field1CharacterStatus.HAPPY
+        #go_to_field_2()
 
 
 def save_code(text):
@@ -115,11 +116,24 @@ def render_field_1(screen, go_to_field_2):
     avatar_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_frame_img)
     frame.add_element(avatar_frame)
 
-    dialogue_text_phase_1_1 = DialogueText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
-    frame.add_element(dialogue_text_phase_1_1)
-    dialogue_text_phase_1_2 = DialogueText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
-    frame.add_element(dialogue_text_phase_1_2)
-    dialogue_text_phase_1_3 = DialogueText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
+    if field_1_character_status == Field1CharacterStatus.HAPPY:
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-happy-character.png")).convert_alpha()
+        avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
+        frame.add_element(avatar_img_frame)
+    elif field_1_character_status == Field1CharacterStatus.SAD:
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-character.png")).convert_alpha()
+        avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
+        frame.add_element(avatar_img_frame)
+    else:
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-character.png")).convert_alpha()
+        avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
+        frame.add_element(avatar_img_frame)
+
+    dialog_text_phase_1_1 = DialogText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
+    frame.add_element(dialog_text_phase_1_1)
+    dialog_text_phase_1_2 = DialogText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
+    frame.add_element(dialog_text_phase_1_2)
+    dialog_text_phase_1_3 = DialogText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
 
     frame.add_element(dialogue_text_phase_1_3)
 
