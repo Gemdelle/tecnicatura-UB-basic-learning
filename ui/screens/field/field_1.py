@@ -138,30 +138,30 @@ def render_field_1(screen, go_to_field_2):
     frame.add_element(avatar_frame)
 
     if field_1_character_status == Field1CharacterStatus.HAPPY:
-        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-happy-character.png")).convert_alpha()
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields\\01-field-happy.png")).convert_alpha()
         avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
     elif field_1_character_status == Field1CharacterStatus.SAD:
-        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-sad-character.png")).convert_alpha()
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields\\01-field-sad.png")).convert_alpha()
         avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
     else:
-        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields-default-character.png")).convert_alpha()
+        avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields\\01-field-default.png")).convert_alpha()
         avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
 
-    dialog_text_phase_1_1 = DialogueText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
-    frame.add_element(dialog_text_phase_1_1)
-    dialog_text_phase_1_2 = DialogueText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
-    frame.add_element(dialog_text_phase_1_2)
-    dialog_text_phase_1_3 = DialogueText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
-    frame.add_element(dialog_text_phase_1_3)
+    dialogue_text_phase_1_1 = DialogueText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
+    frame.add_element(dialogue_text_phase_1_1)
+    dialogue_text_phase_1_2 = DialogueText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
+    frame.add_element(dialogue_text_phase_1_2)
+    dialogue_text_phase_1_3 = DialogueText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
+    frame.add_element(dialogue_text_phase_1_3)
 
-    dialog_text_sad_phase_1_1 = DialogueText(screen, 120, 150, 500, 300, typed_text_sad_phase_1_1)
-    frame.add_element(dialog_text_sad_phase_1_1)
+    dialogue_text_sad_phase_1_1 = DialogueText(screen, 120, 150, 500, 300, typed_text_sad_phase_1_1)
+    frame.add_element(dialogue_text_sad_phase_1_1)
 
-    dialog_text_happy_phase_1_1 = DialogueText(screen, 120, 150, 500, 300, typed_text_happy_phase_1_1)
-    frame.add_element(dialog_text_happy_phase_1_1)
+    dialogue_text_happy_phase_1_1 = DialogueText(screen, 120, 150, 500, 300, typed_text_happy_phase_1_1)
+    frame.add_element(dialogue_text_happy_phase_1_1)
 
     # Delay for the typing speed
     pygame.time.delay(int(1000 / typing_speed))
