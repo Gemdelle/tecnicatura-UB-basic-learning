@@ -1,5 +1,7 @@
 import pygame
 
+from ui.utils.resource_path_util import resource_path
+
 start_scale = 1
 target_scale = 1.4
 total_duration = 2
@@ -9,12 +11,20 @@ scale_change_per_frame = (target_scale - start_scale) / (total_duration * frames
 
 current_scale = start_scale
 
-def render_splash(screen, go_to_map_1):
-    global current_scale
+blink_interval = 500  # milliseconds
+blink_timer = 0
+visible = True
 
-    background_image = pygame.image.load("assets/splash_background.png").convert()
+
+def start_game(go_to_map_1):
+    go_to_map_1()
+
+
+def render_splash(screen):
+    global current_scale, blink_timer, visible
+    background_image = pygame.image.load(resource_path("assets\\splash\\splash_background.png")).convert_alpha()
     background_rect = background_image.get_rect()
-    logo_image = pygame.image.load("assets/UB_logo.jpg").convert()
+    logo_image = pygame.image.load(resource_path("assets\\splash\\UB_logo.jpg")).convert_alpha()
     logo_rect = logo_image.get_rect()
 
     current_scale += scale_change_per_frame
@@ -36,3 +46,14 @@ def render_splash(screen, go_to_map_1):
     screen.fill((255, 255, 255))
     screen.blit(scaled_background, scaled_rect)
     screen.blit(scaled_logo, scaled_logo_rect)
+
+    if current_scale == target_scale:
+        font = pygame.font.Font(resource_path('font\\White Storm.ttf'), 40)
+        text_surface = font.render("Press {SPACE-BAR} to continue", True, (255, 255, 255))
+        text_rect = text_surface.get_rect(center=(950, 1000))
+        blink_timer += pygame.time.Clock().tick(60)
+        if blink_timer >= blink_interval:
+            visible = not visible
+            blink_timer = 0
+        if visible:
+            screen.blit(text_surface, text_rect)

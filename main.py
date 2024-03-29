@@ -1,6 +1,3 @@
-import os
-import sys
-
 import pygame
 
 from sys import exit
@@ -21,11 +18,12 @@ from ui.screens.map.map_2 import render_map_2
 from ui.screens.map.map_3 import render_map_3
 from ui.screens.map.map_4 import render_map_4
 from ui.screens.map.map_5 import render_map_5
-from ui.screens.splash import render_splash
+from ui.screens.splash import render_splash, start_game
 from ui.screens.water_woods.water_woods_1 import render_water_woods_1
 from ui.screens.water_woods.water_woods_2 import render_water_woods_2
 from ui.screens.water_woods.water_woods_3 import render_water_woods_3
 from ui.screens.water_woods.water_woods_4 import render_water_woods_4
+from ui.utils.resource_path_util import resource_path
 
 # Setup
 pygame.init()
@@ -33,28 +31,15 @@ PRODUCT_HEIGHT = 28
 MARGIN = 130
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
-screen = pygame.display.set_mode((SCREEN_WIDTH,
-                                  SCREEN_HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('PyEvolve')
 clock = pygame.time.Clock()
 game_active = True
 running = True
 
-screen_selected = Screens.FIELD_1
+screen_selected = Screens.SPLASH
 
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS2
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
-
-button_font_manager = pygame.font.Font(resource_path('font\\BlackCastleMF.ttf'), 25)
 button_font_manager = pygame.font.Font(resource_path('font\\White Storm.ttf'), 25)
-button_font_manager = pygame.font.Font(resource_path('font\\gungsuh\\Gungsuh-03.ttf'), 25)
 
 def listen_to_key_binding():
     global running, screen_selected
@@ -71,6 +56,8 @@ def listen_to_key_binding():
                 erase_code()
             elif event.key == pygame.K_RETURN:
                 line_break()
+            elif event.key == pygame.K_SPACE:
+                start_game(go_to_field_1)
 
 # MAP NAVIGATION #
 def go_to_map_1():
@@ -182,7 +169,7 @@ while running:
     listen_to_key_binding()
     if game_active:
         if screen_selected == Screens.SPLASH:
-            render_splash(screen, go_to_map_1)
+            render_splash(screen)
         elif screen_selected == Screens.MAP_1:
             render_map_1(screen, go_to_map_2, go_to_map_3, go_to_map_4, go_to_map_5)
         elif screen_selected == Screens.MAP_2:
@@ -221,8 +208,6 @@ while running:
             render_water_woods_3(screen, go_to_water_woods_2, go_to_finish_screen)
         elif screen_selected == Screens.WATER_WOODS_4:
             render_water_woods_4(screen, go_to_water_woods_2, go_to_finish_screen)
-
-
         else:
             print("HOLA")
 

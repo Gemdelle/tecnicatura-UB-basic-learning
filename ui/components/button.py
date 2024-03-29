@@ -1,17 +1,7 @@
-import os
-import sys
-
 import pygame
 
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS2
-    except Exception:
-        base_path = os.path.abspath(".")
+from ui.utils.resource_path_util import resource_path
 
-    return os.path.join(base_path, relative_path)
 class Button:
     def __init__(self, screen, x, y, width, height, text, text_color, color, action):
         self.screen = screen

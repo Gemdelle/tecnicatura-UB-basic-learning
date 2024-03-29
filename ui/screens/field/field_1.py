@@ -1,4 +1,4 @@
-import os
+import threading
 
 import pygame
 import io
@@ -9,6 +9,8 @@ from ui.components.avatar_frame import AvatarFrame
 from ui.components.button import Button
 from ui.components.dialogue_text import DialogueText
 from ui.components.frame import Frame
+from ui.components.image import Image
+from ui.utils.resource_path_util import resource_path
 
 text_to_type_phase_1_1_backup = "Aprendí hace poco a contar y no sé si me confundí."
 text_to_type_phase_1_2_backup = "- Verificar que la cantidad de hierbas sea la correcta."
@@ -30,8 +32,7 @@ text_to_type_happy_phase_1_1_backup = "Bien ahi maquina, pasaste la prueba"
 text_to_type_happy_phase_1_1 = "Bien ahi maquina, pasaste la prueba"
 typed_text_happy_phase_1_1 = ""
 
-# Typing speed (characters per second)
-typing_speed = 10
+typing_speed = 30
 
 herbs_count = 3
 flowers_count = 3
@@ -44,17 +45,7 @@ validation_code_text = ['print(hierbas == 3)']
 cursor = 0
 active = True
 field_1_character_status = Field1CharacterStatus.DEFAULT
-
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS2
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
-
+is_tooltip_active = False
 
 def execute_code():
     global code_text, field_1_character_status
@@ -65,41 +56,42 @@ def execute_code():
         code_to_validate.append(code)
 
     code_to_execute = "\n".join(code_to_validate)
-    # Create a StringIO object to capture printed output
     captured_output = io.StringIO()
-    # Redirect stdout to the StringIO object
     sys.stdout = captured_output
-    # Execute the input code
     try:
         exec(code_to_execute)
     except Exception as e:
         print("Error:", e)
     finally:
-        # Restore stdout
         sys.stdout = sys.__stdout__
-    # Get the captured output
+
     output = captured_output.getvalue().replace("\n", "")
-    # Close the StringIO object
     captured_output.close()
     if output == "True":
         field_1_character_status = Field1CharacterStatus.HAPPY
-        #go_to_field_2()
     else:
         field_1_character_status = Field1CharacterStatus.SAD
 
 def save_code(text):
     global code_text
-    code_text[-1] += text
+    if not field_1_character_status == Field1CharacterStatus.HAPPY:
+        code_text[-1] += text
 
 def erase_code():
     global code_text
-    code_text[-1] = code_text[-1][:-1]
-    if len(code_text[-1]) == 0:
-        if len(code_text) > 1:
-            code_text = code_text[:-1]
+    if not field_1_character_status == Field1CharacterStatus.HAPPY:
+        code_text[-1] = code_text[-1][:-1]
+        if len(code_text[-1]) == 0:
+            if len(code_text) > 1:
+                code_text = code_text[:-1]
 
 def line_break():
-    code_text.append("")
+    if not field_1_character_status == Field1CharacterStatus.HAPPY:
+        code_text.append("")
+
+def toggle_tooltip():
+    global is_tooltip_active
+    is_tooltip_active = not is_tooltip_active
 
 def render_field_1(screen, go_to_field_2):
     global text_to_type_happy_phase_1_1,typed_text_happy_phase_1_1,field_1_character_status, text_to_type_sad_phase_1_1, typed_text_phase_1_1, typed_text_phase_1_2, typed_text_phase_1_3, text_to_type_phase_1_1, text_to_type_phase_1_2, text_to_type_phase_1_3, code_text, active,cursor, typed_text_sad_phase_1_1
@@ -149,6 +141,10 @@ def render_field_1(screen, go_to_field_2):
         avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields\\01-field-default.png")).convert_alpha()
         avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
+
+    info_img = Image(screen, avatar_frame.rect.x + (avatar_frame.rect.width / 1.5),30, 50,50, "assets\\common\\info_icon.png", lambda: toggle_tooltip())
+    frame.add_element(info_img)
+    threading.Thread(target=info_img.check_mouse_over).start()
 
     dialogue_text_phase_1_1 = DialogueText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
     frame.add_element(dialogue_text_phase_1_1)
@@ -215,8 +211,15 @@ def render_field_1(screen, go_to_field_2):
                 if not text_to_type_phase_1_3:
                     pass
 
+    if is_tooltip_active:
+        tooltip_img = pygame.image.load(resource_path("assets\\fields\\coding-area.png")).convert_alpha()
+        tooltip_img = pygame.transform.scale(tooltip_img, (300, 100))
+        tooltip_img_frame = Frame(screen, info_img.rect.x - 300, info_img.rect.y, 300, 300, (100, 100, 100), tooltip_img)
+        frame.add_element(tooltip_img_frame)
+
     frame.draw()
     code_frame.draw()
+
     try:
         if code_text[-1][-1] == "|":
             code_text[-1] = code_text[-1][:-1]
