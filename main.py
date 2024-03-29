@@ -52,7 +52,9 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-button_font_manager = pygame.font.Font(resource_path('font\\Alkhemikal.ttf'), 25)
+button_font_manager = pygame.font.Font(resource_path('font\\BlackCastleMF.ttf'), 25)
+button_font_manager = pygame.font.Font(resource_path('font\\White Storm.ttf'), 25)
+button_font_manager = pygame.font.Font(resource_path('font\\gungsuh\\Gungsuh-03.ttf'), 25)
 
 def listen_to_key_binding():
     global running, screen_selected

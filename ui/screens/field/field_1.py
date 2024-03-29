@@ -6,7 +6,7 @@ import sys
 
 from ui.components.avatar_frame import AvatarFrame
 from ui.components.button import Button
-from ui.components.dialog_text import DialogText
+from ui.components.dialogue_text import DialogueText
 from ui.components.frame import Frame
 
 text_to_type_phase_1_1 = "Aprendí hace poco a contar y no sé si me confundí."
@@ -98,7 +98,7 @@ def render_field_1(screen, go_to_field_2):
         code_text[-1] += "|"
     cursor += 1
     for row, line in enumerate(code_text):
-        code_text_component = DialogText(screen, 60, 360 + (row * 40), 500, 600, line)
+        code_text_component = DialogueText(screen, 60, 360 + (row * 40), 500, 600, line)
         code_frame.add_element(code_text_component)
 
     # BACKGROUND #
@@ -107,21 +107,21 @@ def render_field_1(screen, go_to_field_2):
     scaled_image = pygame.transform.scale(background_image, (1920 , 1080))
     screen.blit(scaled_image, background_rect)
 
-    # DIALOG FRAME + AVATAR FRAME #
-    dialog_frame = pygame.image.load(resource_path("assets\\fields\\instructions.png")).convert_alpha()
-    frame = Frame(screen, 50, 30, 1756, 266, (100, 100, 100), dialog_frame)
+    # DIALOGUE FRAME + AVATAR FRAME #
+    dialogue_frame = pygame.image.load(resource_path("assets\\fields\\instructions.png")).convert_alpha()
+    frame = Frame(screen, 50, 30, 1756, 266, (100, 100, 100), dialogue_frame)
 
     avatar_frame_img = pygame.image.load(resource_path("assets\\fields\\face-frame.png")).convert_alpha()
     avatar_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_frame_img)
     frame.add_element(avatar_frame)
 
-    dialog_text_phase_1_1 = DialogText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
-    frame.add_element(dialog_text_phase_1_1)
-    dialog_text_phase_1_2 = DialogText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
-    frame.add_element(dialog_text_phase_1_2)
-    dialog_text_phase_1_3 = DialogText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
+    dialogue_text_phase_1_1 = DialogueText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
+    frame.add_element(dialogue_text_phase_1_1)
+    dialogue_text_phase_1_2 = DialogueText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
+    frame.add_element(dialogue_text_phase_1_2)
+    dialogue_text_phase_1_3 = DialogueText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
 
-    frame.add_element(dialog_text_phase_1_3)
+    frame.add_element(dialogue_text_phase_1_3)
 
     # Delay for the typing speed
     pygame.time.delay(int(1000 / typing_speed))
