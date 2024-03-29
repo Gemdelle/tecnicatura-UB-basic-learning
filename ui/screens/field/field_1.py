@@ -150,19 +150,18 @@ def render_field_1(screen, go_to_field_2):
         avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
 
-    dialog_text_phase_1_1 = DialogText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
+    dialog_text_phase_1_1 = DialogueText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
     frame.add_element(dialog_text_phase_1_1)
-    dialog_text_phase_1_2 = DialogText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
+    dialog_text_phase_1_2 = DialogueText(screen, 120, 150, 500, 300, typed_text_phase_1_2)
     frame.add_element(dialog_text_phase_1_2)
-    dialog_text_phase_1_3 = DialogText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
+    dialog_text_phase_1_3 = DialogueText(screen, 120, 200, 500, 300, typed_text_phase_1_3)
+    frame.add_element(dialog_text_phase_1_3)
 
-    dialog_text_sad_phase_1_1 = DialogText(screen, 120, 150, 500, 300, typed_text_sad_phase_1_1)
+    dialog_text_sad_phase_1_1 = DialogueText(screen, 120, 150, 500, 300, typed_text_sad_phase_1_1)
     frame.add_element(dialog_text_sad_phase_1_1)
 
-    dialog_text_happy_phase_1_1 = DialogText(screen, 120, 150, 500, 300, typed_text_happy_phase_1_1)
+    dialog_text_happy_phase_1_1 = DialogueText(screen, 120, 150, 500, 300, typed_text_happy_phase_1_1)
     frame.add_element(dialog_text_happy_phase_1_1)
-
-    frame.add_element(dialogue_text_phase_1_3)
 
     # Delay for the typing speed
     pygame.time.delay(int(1000 / typing_speed))
