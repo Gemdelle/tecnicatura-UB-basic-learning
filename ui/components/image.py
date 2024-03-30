@@ -1,7 +1,6 @@
 import pygame
 
 from ui.utils.resource_path_util import resource_path
-from ui.utils.throttle import throttle
 
 
 class Image:

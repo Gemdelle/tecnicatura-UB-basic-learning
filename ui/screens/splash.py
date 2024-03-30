@@ -1,5 +1,6 @@
 import pygame
 
+from ui.utils.SoundManager import SoundManager
 from ui.utils.resource_path_util import resource_path
 
 start_scale = 1
@@ -14,14 +15,23 @@ current_scale = start_scale
 blink_interval = 150  # milliseconds
 blink_timer = 0
 visible = True
-
+was_splash_music_already_played = False
 
 def start_game(go_to_map_1):
+    sound_manager = SoundManager()
+    sound_manager.stop_sound("introduction")
     go_to_map_1()
 
+def play_music():
+    sound_manager = SoundManager()
+    sound_manager.set_volume("introduction", 0.3)
+    sound_manager.play_sound("introduction")
 
 def render_splash(screen):
-    global current_scale, blink_timer, visible
+    global current_scale, blink_timer, visible, was_splash_music_already_played
+    if not was_splash_music_already_played:
+        was_splash_music_already_played = True
+        play_music()
     background_image = pygame.image.load(resource_path("assets\\splash\\splash_background.png")).convert_alpha()
     background_rect = background_image.get_rect()
     logo_image = pygame.image.load(resource_path("assets\\splash\\front-static.png")).convert_alpha()

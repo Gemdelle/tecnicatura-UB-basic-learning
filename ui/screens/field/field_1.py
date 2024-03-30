@@ -8,6 +8,7 @@ from ui.components.button import Button
 from ui.components.dialogue_text import DialogueText
 from ui.components.frame import Frame
 from ui.components.image import Image
+from ui.utils.SoundManager import SoundManager
 from ui.utils.resource_path_util import resource_path
 
 text_to_type_phase_1_1_backup = "Aprendí hace poco a contar y no sé si me confundí."
@@ -44,6 +45,8 @@ cursor = 0
 active = True
 field_1_character_status = Field1CharacterStatus.DEFAULT
 is_tooltip_active = False
+should_give_next_level_feedback = False
+field_1_music_has_not_been_played = False
 
 def execute_code():
     global code_text, field_1_character_status
@@ -66,8 +69,10 @@ def execute_code():
     output = captured_output.getvalue().replace("\n", "")
     captured_output.close()
     if output == "True":
+        play_correct_sound()
         field_1_character_status = Field1CharacterStatus.HAPPY
     else:
+        play_wrong_sound()
         field_1_character_status = Field1CharacterStatus.SAD
 
 def save_code(text):
@@ -91,16 +96,40 @@ def toggle_tooltip():
     global is_tooltip_active
     is_tooltip_active = not is_tooltip_active
 
+def play_background_music():
+    sound_manager = SoundManager()
+    sound_manager.set_volume("background_music", 0.3)
+    sound_manager.play_sound("background_music")
+
+def play_correct_sound():
+    sound_manager = SoundManager()
+    sound_manager.set_volume("correct", 0.3)
+    sound_manager.play_sound("correct")
+
+def play_wrong_sound():
+    sound_manager = SoundManager()
+    sound_manager.set_volume("wrong", 0.3)
+    sound_manager.play_sound("wrong")
+
+def play_next_level_sound():
+    sound_manager = SoundManager()
+    sound_manager.set_volume("next-level", 0.3)
+    sound_manager.play_sound("next-level")
+
 def render_field_1(screen, go_to_field_2):
-    global text_to_type_happy_phase_1_1,typed_text_happy_phase_1_1,field_1_character_status, text_to_type_sad_phase_1_1, typed_text_phase_1_1, typed_text_phase_1_2, typed_text_phase_1_3, text_to_type_phase_1_1, text_to_type_phase_1_2, text_to_type_phase_1_3, code_text, active,cursor, typed_text_sad_phase_1_1
+    global field_1_music_has_not_been_played, should_give_next_level_feedback, text_to_type_happy_phase_1_1,typed_text_happy_phase_1_1,field_1_character_status, text_to_type_sad_phase_1_1, typed_text_phase_1_1, typed_text_phase_1_2, typed_text_phase_1_3, text_to_type_phase_1_1, text_to_type_phase_1_2, text_to_type_phase_1_3, code_text, active,cursor, typed_text_sad_phase_1_1
     code_area = pygame.image.load(resource_path("assets\\fields\\coding-area.png")).convert_alpha()
     code_frame = Frame(screen, 50, 350, 600, 700, (100, 100, 100), code_area)
 
-    if field_1_character_status == Field1CharacterStatus.HAPPY:
+    if not field_1_music_has_not_been_played:
+        field_1_music_has_not_been_played = True
+        play_background_music()
+
+    if field_1_character_status == Field1CharacterStatus.HAPPY and should_give_next_level_feedback:
         code_button = Button(screen, 300, 950, 100, 60, "Next", (0, 0, 0), "White", lambda: go_to_field_2())
         code_button.check_click()
         code_frame.add_element(code_button)
-    else:
+    elif not field_1_character_status == Field1CharacterStatus.HAPPY:
         code_button = Button(screen, 300, 950, 100,60, "Run", (0, 0, 0),"White", lambda: execute_code())
         code_button.check_click()
         code_frame.add_element(code_button)
@@ -187,8 +216,9 @@ def render_field_1(screen, go_to_field_2):
         if text_to_type_happy_phase_1_1:
             typed_text_happy_phase_1_1 += text_to_type_happy_phase_1_1[0]
             text_to_type_happy_phase_1_1 = text_to_type_happy_phase_1_1[1:]
-        if not text_to_type_happy_phase_1_1:
-            pass
+        if not text_to_type_happy_phase_1_1 and not should_give_next_level_feedback:
+            play_next_level_sound()
+            should_give_next_level_feedback = True
     else:
         typed_text_sad_phase_1_1 = ""
         text_to_type_sad_phase_1_1 = text_to_type_sad_phase_1_1_backup
