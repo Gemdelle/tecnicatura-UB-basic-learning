@@ -51,17 +51,21 @@ def listen_to_key_binding():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.TEXTINPUT:
-            save_code(event.text)
+            if screen_selected == Screens.FIELD_1:
+                save_code(event.text)
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
             elif event.key == pygame.K_BACKSPACE:
-                erase_code()
+                if screen_selected == Screens.FIELD_1:
+                    erase_code()
             elif event.key == pygame.K_RETURN:
-                line_break()
+                if screen_selected == Screens.FIELD_1:
+                    line_break()
             elif event.key == pygame.K_SPACE:
-                start_game(go_to_field_1)
+                if screen_selected == Screens.SPLASH:
+                    start_game(go_to_field_1)
 
 
 # MAP NAVIGATION #
