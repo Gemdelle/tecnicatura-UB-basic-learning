@@ -3,6 +3,7 @@ from enum import Enum
 # Define an enumeration class
 class Screens(Enum):
     SPLASH = "SPLASH"
+    REGION_SELECTION = "REGION_SELECTION"
     MAP_1 = "MAP_1"
     MAP_2 = "MAP_2"
     MAP_3 = "MAP_3"

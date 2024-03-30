@@ -1,6 +1,6 @@
 import pygame
 
-from ui.utils.SoundManager import SoundManager
+from ui.utils.sound_manager import SoundManager
 from ui.utils.resource_path_util import resource_path
 
 start_scale = 1

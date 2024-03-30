@@ -1,5 +1,3 @@
-import os
-
 import pygame
 
 from sys import exit
@@ -20,12 +18,13 @@ from ui.screens.map.map_2 import render_map_2
 from ui.screens.map.map_3 import render_map_3
 from ui.screens.map.map_4 import render_map_4
 from ui.screens.map.map_5 import render_map_5
+from ui.screens.region_selection import render_region_selection, move_forward
 from ui.screens.splash import render_splash, start_game
 from ui.screens.water_woods.water_woods_1 import render_water_woods_1
 from ui.screens.water_woods.water_woods_2 import render_water_woods_2
 from ui.screens.water_woods.water_woods_3 import render_water_woods_3
 from ui.screens.water_woods.water_woods_4 import render_water_woods_4
-from ui.utils.SoundManager import SoundManager
+from ui.utils.sound_manager import SoundManager
 from ui.utils.resource_path_util import resource_path
 
 # Setup
@@ -65,10 +64,17 @@ def listen_to_key_binding():
                     line_break()
             elif event.key == pygame.K_SPACE:
                 if screen_selected == Screens.SPLASH:
-                    start_game(go_to_field_1)
+                    start_game(go_to_region_selection)
+                elif screen_selected == Screens.REGION_SELECTION:
+                    move_forward()
 
 
 # MAP NAVIGATION #
+def go_to_region_selection():
+    global screen_selected
+    screen_selected = Screens.REGION_SELECTION
+    print("Navigate to:", screen_selected)
+
 def go_to_map_1():
     global screen_selected
     screen_selected = Screens.MAP_1
@@ -206,6 +212,8 @@ while running:
     if game_active:
         if screen_selected == Screens.SPLASH:
             render_splash(screen)
+        if screen_selected == Screens.REGION_SELECTION:
+            render_region_selection(screen)
         elif screen_selected == Screens.MAP_1:
             render_map_1(screen, go_to_map_2, go_to_map_3, go_to_map_4, go_to_map_5)
         elif screen_selected == Screens.MAP_2:
@@ -225,8 +233,7 @@ while running:
         elif screen_selected == Screens.FIELD_4:
             render_field_4(screen, go_to_field_3, go_to_light_woods_1)
         elif screen_selected == Screens.LIGHT_WOODS_1:
-            render_light_woods_1(screen, go_to_light_woods_2, go_to_light_woods_3, go_to_light_woods_4,
-                                 go_to_light_woods_5)
+            render_light_woods_1(screen, go_to_light_woods_2, go_to_light_woods_3, go_to_light_woods_4, go_to_light_woods_5)
         elif screen_selected == Screens.LIGHT_WOODS_2:
             render_light_woods_2(screen, go_to_light_woods_1)
         elif screen_selected == Screens.LIGHT_WOODS_3:
@@ -240,8 +247,7 @@ while running:
         elif screen_selected == Screens.WATER_WOODS_1:
             render_water_woods_1(screen, go_to_water_woods_2)
         elif screen_selected == Screens.WATER_WOODS_2:
-            render_water_woods_2(screen, go_to_water_woods_1, go_to_water_woods_2, go_to_water_woods_3,
-                                 go_to_water_woods_4)
+            render_water_woods_2(screen, go_to_water_woods_1, go_to_water_woods_2, go_to_water_woods_3,go_to_water_woods_4)
         elif screen_selected == Screens.WATER_WOODS_3:
             render_water_woods_3(screen, go_to_water_woods_2, go_to_finish_screen)
         elif screen_selected == Screens.WATER_WOODS_4:

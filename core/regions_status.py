@@ -1,0 +1,9 @@
+from enum import Enum
+
+
+class RegionsStatus(Enum):
+    MAP = "MAP",
+    MAP_COMPLETED = "MAP_COMPLETED",
+    VARIABLES_COMPLETED = "VARIABLES_COMPLETED"
+    IF_COMPLETED = "IF_COMPLETED"
+    WHILE_COMPLETED = "WHILE_COMPLETED"

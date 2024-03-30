@@ -8,7 +8,7 @@ from ui.components.button import Button
 from ui.components.dialogue_text import DialogueText
 from ui.components.frame import Frame
 from ui.components.image import Image
-from ui.utils.SoundManager import SoundManager
+from ui.utils.sound_manager import SoundManager
 from ui.utils.resource_path_util import resource_path
 
 text_to_type_phase_1_1_backup = "Aprendí hace poco a contar y no sé si me confundí."
