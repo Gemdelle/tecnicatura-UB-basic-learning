@@ -1,3 +1,5 @@
+import os
+
 import pygame
 
 from sys import exit
@@ -165,6 +167,19 @@ def go_to_finish_screen():
     #print("Navigate to:", screen_selected)
     print("FINISH!")
 
+def play_music():
+    pygame.mixer.music.set_volume(0.6)
+    mp3_file = resource_path("assets\\sounds\\background_music.mp3")
+    if not os.path.exists(mp3_file):
+        raise FileNotFoundError(f"File '{mp3_file}' not found.")
+    try:
+        pygame.mixer.music.load(mp3_file)
+        pygame.mixer.music.play(loops=-1)
+    except KeyboardInterrupt:
+        pygame.mixer.music.stop()
+        pygame.quit()
+
+play_music()
 while running:
     listen_to_key_binding()
     if game_active:
@@ -213,4 +228,3 @@ while running:
 
     pygame.display.update()
     clock.tick(60)
-

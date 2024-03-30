@@ -1,5 +1,3 @@
-import threading
-
 import pygame
 import io
 import sys
@@ -142,9 +140,9 @@ def render_field_1(screen, go_to_field_2):
         avatar_img_frame = AvatarFrame(screen, 1500, 30, 367, 384, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
 
-    info_img = Image(screen, avatar_frame.rect.x + (avatar_frame.rect.width / 1.5),30, 50,50, "assets\\common\\info_icon.png", lambda: toggle_tooltip())
+    info_img = Image(screen, avatar_frame.rect.x + (avatar_frame.rect.width / 2),avatar_frame.rect.y + avatar_frame.rect.height, 50,50, "assets\\common\\info_icon.png", lambda: toggle_tooltip())
     frame.add_element(info_img)
-    threading.Thread(target=info_img.check_mouse_over).start()
+    info_img.check_mouse_over()
 
     dialogue_text_phase_1_1 = DialogueText(screen, 120, 100, 500, 300, typed_text_phase_1_1)
     frame.add_element(dialogue_text_phase_1_1)
@@ -213,8 +211,8 @@ def render_field_1(screen, go_to_field_2):
 
     if is_tooltip_active:
         tooltip_img = pygame.image.load(resource_path("assets\\fields\\coding-area.png")).convert_alpha()
-        tooltip_img = pygame.transform.scale(tooltip_img, (300, 100))
-        tooltip_img_frame = Frame(screen, info_img.rect.x - 300, info_img.rect.y, 300, 300, (100, 100, 100), tooltip_img)
+        tooltip_img = pygame.transform.scale(tooltip_img, (300, 400))
+        tooltip_img_frame = Frame(screen, info_img.rect.x - 300, info_img.rect.y, 300, 400, (100, 100, 100), tooltip_img)
         frame.add_element(tooltip_img_frame)
 
     frame.draw()

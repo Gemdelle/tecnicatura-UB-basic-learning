@@ -25,7 +25,6 @@ def render_splash(screen):
     background_image = pygame.image.load(resource_path("assets\\splash\\splash_background.png")).convert_alpha()
     background_rect = background_image.get_rect()
     logo_image = pygame.image.load(resource_path("assets\\splash\\front-static.png")).convert_alpha()
-    logo_rect = logo_image.get_rect()
 
     current_scale += scale_change_per_frame
 
