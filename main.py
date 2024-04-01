@@ -24,6 +24,7 @@ from ui.screens.water_woods.water_woods_1 import render_water_woods_1
 from ui.screens.water_woods.water_woods_2 import render_water_woods_2
 from ui.screens.water_woods.water_woods_3 import render_water_woods_3
 from ui.screens.water_woods.water_woods_4 import render_water_woods_4
+from ui.utils.localization_manager import LocalizationManager
 from ui.utils.sound_manager import SoundManager
 from ui.utils.resource_path_util import resource_path
 
@@ -39,7 +40,7 @@ clock = pygame.time.Clock()
 game_active = True
 running = True
 
-screen_selected = Screens.SPLASH
+screen_selected = Screens.FIELD_1
 
 button_font_manager = pygame.font.Font(resource_path('font\\White Storm.ttf'), 25)
 
@@ -207,13 +208,18 @@ sound_manager.load_sound("wrong", resource_path("assets\\sounds\\wrong.mp3"))
 sound_manager.load_sound("next-level", resource_path("assets\\sounds\\next-level.mp3"))
 sound_manager.load_sound("introduction", resource_path("assets\\sounds\\introduction.mp3"))
 
+# Preload Localizations
+localizationManager = LocalizationManager("en")
+localizationManager.load_translations("en", resource_path("assets\\data\\translations_en.json"))
+localizationManager.load_translations("es", resource_path("assets\\data\\translations_es.json"))
+
 while running:
     listen_to_key_binding()
     if game_active:
         if screen_selected == Screens.SPLASH:
             render_splash(screen)
         if screen_selected == Screens.REGION_SELECTION:
-            render_region_selection(screen)
+            render_region_selection(screen, go_to_map_1)
         elif screen_selected == Screens.MAP_1:
             render_map_1(screen, go_to_map_2, go_to_map_3, go_to_map_4, go_to_map_5)
         elif screen_selected == Screens.MAP_2:
@@ -225,7 +231,7 @@ while running:
         elif screen_selected == Screens.MAP_5:
             render_map_5(screen, go_to_map_1, go_to_field_1)
         elif screen_selected == Screens.FIELD_1:
-            render_field_1(screen, go_to_field_2)
+            render_field_1(screen, go_to_field_2, go_to_region_selection)
         elif screen_selected == Screens.FIELD_2:
             render_field_2(screen, go_to_field_1, go_to_field_3)
         elif screen_selected == Screens.FIELD_3:

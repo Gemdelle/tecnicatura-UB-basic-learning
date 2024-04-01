@@ -6,6 +6,8 @@ class Frame:
         self.elements = []
         self.border_color = border_color
         self.img = img
+        self.width = width
+        self.height = height
 
     def add_element(self, element):
         self.elements.append(element)
@@ -15,7 +17,8 @@ class Frame:
 
     def draw(self):
         if self.img is not None:
-            self.screen.blit(self.img, self.rect)
+            scaled_image = pygame.transform.scale(self.img, (self.width, self.height))
+            self.screen.blit(scaled_image, self.rect)
         else:
             pygame.draw.rect(self.screen, self.border_color, self.rect, border_radius=10)
             pygame.draw.rect(self.screen, (255, 255, 255), self.rect.inflate(-6, -6), border_radius=6)

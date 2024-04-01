@@ -13,6 +13,7 @@ class AvatarFrame:
 
     def draw(self):
         if self.img is not None:
-            self.screen.blit(self.img, self.rect)
+            scaled_image = pygame.transform.scale(self.img, (self.width, self.height))
+            self.screen.blit(scaled_image, self.rect)
         else:
             pygame.draw.circle(self.screen, self.color, (self.x, self.height // 2), 150, self.width)

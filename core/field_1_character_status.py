@@ -3,5 +3,7 @@ from enum import Enum
 
 class Field1CharacterStatus(Enum):
     HAPPY = "HAPPY",
-    SAD = "SAD",
+    SAD_1 = "SAD_1",
+    SAD_2 = "SAD_2",
+    SAD_3 = "SAD_3",
     DEFAULT = "HAPPY"

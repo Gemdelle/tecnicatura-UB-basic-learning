@@ -1,6 +1,7 @@
 import pygame
 
 from core.regions_status import RegionsStatus
+from ui.components.image import Image
 from ui.utils.resource_path_util import resource_path
 
 region_selection_status = RegionsStatus.MAP
@@ -18,7 +19,7 @@ def move_forward():
         region_selection_status = RegionsStatus.WHILE_COMPLETED
 
 
-def render_map(screen):
+def render_map(screen, go_to_map_1):
     # BACKGROUND #
     background_image = pygame.image.load(resource_path("assets\\region_selection\\maps\\original.png")).convert_alpha()
     background_rect = background_image.get_rect()
@@ -26,10 +27,10 @@ def render_map(screen):
     screen.blit(scaled_image, background_rect)
 
     # ACCESS
-    map_enabled_access = pygame.image.load(
-        resource_path("assets\\region_selection\\characters\\Map.png")).convert_alpha()
-    map_enabled_access_rect = pygame.Rect(80, 650, 318, 392)
-    screen.blit(map_enabled_access, map_enabled_access_rect)
+    map_enabled_access = Image(screen, 80, 650, 318, 392, resource_path("assets\\region_selection\\characters\\Map.png"), lambda: go_to_map_1())
+    map_enabled_access.draw()
+    map_enabled_access.check_click()
+
 
     # VARIABLES
     variables_access = pygame.image.load(
@@ -181,10 +182,10 @@ def render_while_completed(screen):
     text_rect = pygame.Rect(1450, 850, 300, 100)
     screen.blit(text_surface, text_rect)
 
-def render_region_selection(screen):
+def render_region_selection(screen, go_to_map_1):
 
     if region_selection_status == RegionsStatus.MAP:
-        render_map(screen)
+        render_map(screen, go_to_map_1)
     elif region_selection_status == RegionsStatus.MAP_COMPLETED:
         render_map_completed(screen)
     elif region_selection_status == RegionsStatus.VARIABLES_COMPLETED:

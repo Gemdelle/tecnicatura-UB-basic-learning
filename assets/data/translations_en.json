@@ -1,4 +1,25 @@
 {
-    "hello": "Hello",
-    "goodbye": "Goodbye"
+
+
+    "field_1_text_to_type_phase_1_1": "Welcome to the Field. In this level you will learn the most important things about variables.",
+    "field_1_text_to_type_phase_1_2": "A variable is used to store different types of data, you can name it however you want.",
+    "field_1_text_to_type_phase_1_3": "You will learn how to:",
+    "field_1_text_to_type_phase_1_4": "* Declare a variable ",
+    "field_1_text_to_type_phase_1_5": "* Store integer data ( int - 2 )",
+    "field_1_text_to_type_phase_1_6": "* Store string data ( str - 'hello' )",
+    "field_1_text_to_type_phase_1_7": "* Store float data ( float - 4.5 )",
+
+
+    "field_1_text_to_type_phase_2_1": "DECLARING VARIABLES AND INT DATA TYPE",
+    "field_1_text_to_type_phase_2_2": "In the field there are flowers and herbs. It seems that today there are no",
+    "field_1_text_to_type_phase_2_3": "herbs, only flowers...Help me correct the variables.",
+    "field_1_text_to_type_phase_2_4": "* Correct the value of herbs ( remember there are none! ).",
+    "field_1_text_to_type_phase_2_5": "* Declare the variable 'flowers' and assign the correct value ( a number, <int> type ).",
+
+    "field_1_text_to_type_phase_3_1": "DECLARING VARIABLES AND INT DATA TYPE",
+    "field_1_text_to_type_phase_3_2": "All set, let's continue. Update the map variables to proceed.",
+
+    "field_1_error_1": "Check the number of herbs.",
+    "field_1_error_2": "Check the number of flowers.",
+    "field_1_error_3": "Check how to declare a variable. You can use the tool tip in case you need it."
 }
