@@ -1,6 +1,5 @@
 {
 
-
     "field_1_text_to_type_phase_1_1": "Welcome to the Field. In this level you will learn the most important things about variables.",
     "field_1_text_to_type_phase_1_2": "A variable is used to store different types of data, you can name it however you want.",
     "field_1_text_to_type_phase_1_3": "You will learn how to:",
@@ -21,5 +20,17 @@
 
     "field_1_error_1": "Check the number of herbs.",
     "field_1_error_2": "Check the number of flowers.",
-    "field_1_error_3": "Check how to declare a variable. You can use the tool tip in case you need it."
+    "field_1_error_3": "Check how to declare a variable. You can use the tool tip in case you need it.",
+    "field_1_error_4": "There seems to be a problem with the flowers... check how to declare a variable.",
+
+    "field_1_tooltip_text_1": "To declare a variable, write its name",
+    "field_1_tooltip_text_2": "followed by = and the desired value.",
+    "field_1_tooltip_text_3": "Remember, the variable name can be any word",
+    "field_1_tooltip_text_4": "you choose.",
+    "field_1_tooltip_text_5": "Integer numeric variables",
+    "field_1_tooltip_text_6": "herbs = 1",
+    "field_1_tooltip_text_7": "To update a value, simply overwrite",
+    "field_1_tooltip_text_8": "the number.",
+    "field_1_tooltip_text_9": "herbs = 5"
+
 }

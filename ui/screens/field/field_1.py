@@ -65,14 +65,17 @@ typed_text_phase_2_5 = ""
 field_1_error_1_backup = localizationManager.translate("field_1_error_1")
 field_1_error_2_backup = localizationManager.translate("field_1_error_2")
 field_1_error_3_backup = localizationManager.translate("field_1_error_3")
+field_1_error_4_backup = localizationManager.translate("field_1_error_4")
 
 text_to_type_error_phase_2_1 = field_1_error_1_backup
 text_to_type_error_phase_2_2 = field_1_error_2_backup
 text_to_type_error_phase_2_3 = field_1_error_3_backup
+text_to_type_error_phase_2_4 = field_1_error_4_backup
 
 typed_text_error_phase_2_1 = ""
 typed_text_error_phase_2_2 = ""
 typed_text_error_phase_2_3 = ""
+typed_text_error_phase_2_4 = ""
 
 field_1_text_to_type_phase_3_1_backup = localizationManager.translate("field_1_text_to_type_phase_3_1")
 field_1_text_to_type_phase_3_2_backup = localizationManager.translate("field_1_text_to_type_phase_3_2")
@@ -80,8 +83,19 @@ field_1_text_to_type_phase_3_2_backup = localizationManager.translate("field_1_t
 text_to_type_correct_phase_3_1 = field_1_text_to_type_phase_3_1_backup
 text_to_type_correct_phase_3_2 = field_1_text_to_type_phase_3_2_backup
 
-typed_text_correct_phase_2_1 = ""
-typed_text_correct_phase_2_2 = ""
+typed_text_correct_phase_3_1 = ""
+typed_text_correct_phase_3_2 = ""
+
+# TOOLTIP
+tooltip_text_1 = localizationManager.translate("field_1_tooltip_text_1")
+tooltip_text_2 = localizationManager.translate("field_1_tooltip_text_2")
+tooltip_text_3 = localizationManager.translate("field_1_tooltip_text_3")
+tooltip_text_4 = localizationManager.translate("field_1_tooltip_text_4")
+tooltip_text_5 = localizationManager.translate("field_1_tooltip_text_5")
+tooltip_text_6 = localizationManager.translate("field_1_tooltip_text_6")
+tooltip_text_7 = localizationManager.translate("field_1_tooltip_text_7")
+tooltip_text_8 = localizationManager.translate("field_1_tooltip_text_8")
+tooltip_text_9 = localizationManager.translate("field_1_tooltip_text_9")
 
 typing_speed = 30
 
@@ -143,7 +157,10 @@ def execute_code():
             field_1_character_status = Field1CharacterStatus.SAD_1
     except Exception as e:
         play_wrong_sound()
-        field_1_character_status = Field1CharacterStatus.SAD_3
+        if e.args[0] == "name 'flowers' is not defined":
+            field_1_character_status = Field1CharacterStatus.SAD_4
+        else:
+            field_1_character_status = Field1CharacterStatus.SAD_3
         print("Error:", e)
     finally:
         sys.stdout = sys.__stdout__
@@ -217,7 +234,9 @@ def render_field_1(screen, go_to_field_2, go_to_region_selection):
         code_text_1, active,cursor, typed_text_sad_phase_1_1, typed_text_phase_1_4, typed_text_phase_1_5, typed_text_phase_1_6, typed_text_phase_1_7, typed_text_phase_2_1, typed_text_phase_2_2,\
         typed_text_phase_2_3, typed_text_phase_2_4, typed_text_phase_2_5, text_to_type_phase_1_4, text_to_type_phase_1_5, text_to_type_phase_1_6, text_to_type_phase_1_7, text_to_type_phase_2_1,\
         text_to_type_phase_2_2, text_to_type_phase_2_3, text_to_type_phase_2_4, text_to_type_phase_2_5, current_phase, text_to_type_error_phase_2_1, text_to_type_error_phase_2_2,\
-        text_to_type_error_phase_2_3, typed_text_error_phase_2_1, typed_text_error_phase_2_2, typed_text_error_phase_2_3, is_changing_to_default
+        text_to_type_error_phase_2_3, typed_text_error_phase_2_1, typed_text_error_phase_2_2, typed_text_error_phase_2_3, is_changing_to_default,\
+        typed_text_error_phase_2_4, text_to_type_error_phase_2_4, tooltip_text_1, tooltip_text_2, tooltip_text_3, tooltip_text_4, tooltip_text_5, tooltip_text_6, \
+        tooltip_text_7, tooltip_text_8, tooltip_text_9, text_to_type_correct_phase_3_1, text_to_type_correct_phase_3_2, typed_text_correct_phase_3_1, typed_text_correct_phase_3_2
 
     code_area = pygame.image.load(resource_path("assets\\fields\\coding-area.png")).convert_alpha()
     code_frame = Frame(screen, 82, 335, 700, 700, (100, 100, 100), code_area)
@@ -240,7 +259,7 @@ def render_field_1(screen, go_to_field_2, go_to_region_selection):
         code_text_1[-1] += "|"
     cursor += 1
     for row, line in enumerate(code_text_1):
-        code_text_component = DialogueText(screen, 145, 370 + (row * 40), 500, 600, line, 40, resource_path('font\\MSMincho.ttf'))
+        code_text_component = DialogueText(screen, 145, 400 + (row * 40), 500, 600, line, 30, resource_path('font\\MSMincho.ttf'))
         code_frame.add_element(code_text_component)
 
     # BACKGROUND #
@@ -261,7 +280,7 @@ def render_field_1(screen, go_to_field_2, go_to_region_selection):
         avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields\\01-field-happy.png")).convert_alpha()
         avatar_img_frame = AvatarFrame(screen, 1580, 25, 250, 250, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
-    elif field_1_character_status == Field1CharacterStatus.SAD_1:
+    elif field_1_character_status == Field1CharacterStatus.SAD_1 or field_1_character_status == Field1CharacterStatus.SAD_2 or field_1_character_status == Field1CharacterStatus.SAD_3  or field_1_character_status == Field1CharacterStatus.SAD_4:
         avatar_img = pygame.image.load(resource_path("assets\\characters\\01-fields\\01-field-sad.png")).convert_alpha()
         avatar_img_frame = AvatarFrame(screen, 1580, 25, 250, 250, (0, 0, 0), avatar_img)
         frame.add_element(avatar_img_frame)
@@ -293,27 +312,29 @@ def render_field_1(screen, go_to_field_2, go_to_region_selection):
     dialogue_text_phase_1_7 = DialogueText(screen, 125, 230, 500, 300, typed_text_phase_1_7, 30)
     frame.add_element(dialogue_text_phase_1_7)
 
-    dialogue_text_phase_2_1 = DialogueText(screen, 125, 60, 500, 300, typed_text_phase_2_1, 30)
+    dialogue_text_phase_2_1 = DialogueText(screen, 125, 80, 500, 300, typed_text_phase_2_1, 30)
     frame.add_element(dialogue_text_phase_2_1)
-    dialogue_text_phase_2_2 = DialogueText(screen, 125, 110, 500, 300, typed_text_phase_2_2, 30)
+    dialogue_text_phase_2_2 = DialogueText(screen, 125, 130, 500, 300, typed_text_phase_2_2, 30)
     frame.add_element(dialogue_text_phase_2_2)
-    dialogue_text_phase_2_3 = DialogueText(screen, 125, 150, 500, 300, typed_text_phase_2_3, 30)
+    dialogue_text_phase_2_3 = DialogueText(screen, 125, 170, 500, 300, typed_text_phase_2_3, 30)
     frame.add_element(dialogue_text_phase_2_3)
-    dialogue_text_phase_2_4 = DialogueText(screen, 125, 200, 500, 300, typed_text_phase_2_4, 30)
+    dialogue_text_phase_2_4 = DialogueText(screen, 800, 130, 500, 300, typed_text_phase_2_4, 30)
     frame.add_element(dialogue_text_phase_2_4)
-    dialogue_text_phase_2_5 = DialogueText(screen, 125, 230, 500, 300, typed_text_phase_2_5, 30)
+    dialogue_text_phase_2_5 = DialogueText(screen, 800, 170, 500, 300, typed_text_phase_2_5, 30)
     frame.add_element(dialogue_text_phase_2_5)
 
-    dialogue_text_sad_phase_1_1 = DialogueText(screen, 125, 150, 500, 300, typed_text_error_phase_2_1)
+    dialogue_text_sad_phase_1_1 = DialogueText(screen, 125, 150, 500, 300, typed_text_error_phase_2_1, 30)
     frame.add_element(dialogue_text_sad_phase_1_1)
-    dialogue_text_sad_phase_1_2 = DialogueText(screen, 125, 150, 500, 300, typed_text_error_phase_2_2)
+    dialogue_text_sad_phase_1_2 = DialogueText(screen, 125, 150, 500, 300, typed_text_error_phase_2_2, 30)
     frame.add_element(dialogue_text_sad_phase_1_2)
-    dialogue_text_sad_phase_1_3 = DialogueText(screen, 125, 150, 500, 300, typed_text_error_phase_2_3)
+    dialogue_text_sad_phase_1_3 = DialogueText(screen, 125, 150, 500, 300, typed_text_error_phase_2_3,30)
     frame.add_element(dialogue_text_sad_phase_1_3)
+    dialogue_text_sad_phase_1_4 = DialogueText(screen, 125, 150, 500, 300, typed_text_error_phase_2_4, 30)
+    frame.add_element(dialogue_text_sad_phase_1_4)
 
-    dialogue_text_happy_phase_1_1 = DialogueText(screen, 125, 150, 500, 300, typed_text_correct_phase_2_1)
+    dialogue_text_happy_phase_1_1 = DialogueText(screen, 125, 80, 500, 300, typed_text_correct_phase_3_1, 30)
     frame.add_element(dialogue_text_happy_phase_1_1)
-    dialogue_text_happy_phase_2_1 = DialogueText(screen, 125, 200, 500, 300, typed_text_correct_phase_2_2)
+    dialogue_text_happy_phase_2_1 = DialogueText(screen, 125, 130, 500, 300, typed_text_correct_phase_3_2, 30)
     frame.add_element(dialogue_text_happy_phase_2_1)
 
     # Delay for the typing speed
@@ -433,6 +454,44 @@ def render_field_1(screen, go_to_field_2, go_to_region_selection):
             timeout_manager = SetTimeoutManager()
             timeout_manager.setTimeout(change_to_default, 3)
 
+    elif field_1_character_status == Field1CharacterStatus.SAD_4:
+        typed_text_phase_1_1 = ""
+        typed_text_phase_1_2 = ""
+        typed_text_phase_1_3 = ""
+        typed_text_phase_1_4 = ""
+        typed_text_phase_1_5 = ""
+        typed_text_phase_1_6 = ""
+        typed_text_phase_1_7 = ""
+
+        text_to_type_phase_1_1 = ""
+        text_to_type_phase_1_2 = ""
+        text_to_type_phase_1_3 = ""
+        text_to_type_phase_1_4 = ""
+        text_to_type_phase_1_5 = ""
+        text_to_type_phase_1_6 = ""
+        text_to_type_phase_1_7 = ""
+
+        typed_text_phase_2_1 = ""
+        typed_text_phase_2_2 = ""
+        typed_text_phase_2_3 = ""
+        typed_text_phase_2_4 = ""
+        typed_text_phase_2_5 = ""
+
+        text_to_type_phase_2_1 = ""
+        text_to_type_phase_2_2 = ""
+        text_to_type_phase_2_3 = ""
+        text_to_type_phase_2_4 = ""
+        text_to_type_phase_2_5 = ""
+
+        if text_to_type_error_phase_2_4:
+            typed_text_error_phase_2_4 += text_to_type_error_phase_2_4[0]
+            text_to_type_error_phase_2_4 = text_to_type_error_phase_2_4[1:]
+        if not text_to_type_error_phase_2_4 and not is_changing_to_default:
+            is_changing_to_default = True
+            typed_text_error_phase_2_4 = field_1_error_4_backup
+            timeout_manager = SetTimeoutManager()
+            timeout_manager.setTimeout(change_to_default, 3)
+
     elif field_1_character_status == Field1CharacterStatus.HAPPY:
         typed_text_phase_1_1 = ""
         typed_text_phase_1_2 = ""
@@ -443,12 +502,17 @@ def render_field_1(screen, go_to_field_2, go_to_region_selection):
         typed_text_sad_phase_1_1 = ""
         text_to_type_sad_phase_1_1 = field_1_error_1_backup
 
-        if text_to_type_happy_phase_1_1:
-            typed_text_happy_phase_1_1 += text_to_type_happy_phase_1_1[0]
-            text_to_type_happy_phase_1_1 = text_to_type_happy_phase_1_1[1:]
-        if not text_to_type_happy_phase_1_1 and not should_give_next_level_feedback:
-            play_next_level_sound()
-            should_give_next_level_feedback = True
+        if text_to_type_correct_phase_3_1:
+            typed_text_correct_phase_3_1 += text_to_type_correct_phase_3_1[0]
+            text_to_type_correct_phase_3_1 = text_to_type_correct_phase_3_1[1:]
+        if not text_to_type_correct_phase_3_1:
+            if text_to_type_correct_phase_3_2:
+                typed_text_correct_phase_3_2 += text_to_type_correct_phase_3_2[0]
+                text_to_type_correct_phase_3_2 = text_to_type_correct_phase_3_2[1:]
+            if not text_to_type_correct_phase_3_2 and not should_give_next_level_feedback:
+                play_next_level_sound()
+                should_give_next_level_feedback = True
+
     elif current_phase == 1:
         typed_text_sad_phase_1_1 = ""
         text_to_type_sad_phase_1_1 = field_1_error_1_backup
@@ -496,6 +560,7 @@ def render_field_1(screen, go_to_field_2, go_to_region_selection):
         typed_text_error_phase_2_1 = ""
         typed_text_error_phase_2_2 = ""
         typed_text_error_phase_2_3 = ""
+        typed_text_error_phase_2_4 = ""
 
         if text_to_type_phase_2_1:
             typed_text_phase_2_1 += text_to_type_phase_2_1[0]
@@ -525,9 +590,26 @@ def render_field_1(screen, go_to_field_2, go_to_region_selection):
 
     if is_tooltip_active:
         tooltip_img = pygame.image.load(resource_path("assets\\fields\\coding-area.png")).convert_alpha()
-        tooltip_img_frame = Frame(screen, info_img.rect.x - 550, info_img.rect.y, 550, 200, (100, 100, 100), tooltip_img)
+        tooltip_img_frame = Frame(screen, info_img.rect.x - 550, info_img.rect.y, 550, 350, (100, 100, 100), tooltip_img)
         frame.add_element(tooltip_img_frame)
-
+        tooltip_1 = DialogueText(screen, tooltip_img_frame.rect.x + 30, tooltip_img_frame.rect.y + 10,550, 20, tooltip_text_1, 30)
+        tooltip_2 = DialogueText(screen, tooltip_img_frame.rect.x + 30, tooltip_img_frame.rect.y + 40,550, 20, tooltip_text_2, 30)
+        tooltip_3 = DialogueText(screen, tooltip_img_frame.rect.x + 30, tooltip_img_frame.rect.y + 70,550, 20, tooltip_text_3, 30)
+        tooltip_4 = DialogueText(screen, tooltip_img_frame.rect.x + 30, tooltip_img_frame.rect.y + 100,550, 20, tooltip_text_4, 30)
+        tooltip_5 = DialogueText(screen, tooltip_img_frame.rect.x + 30, tooltip_img_frame.rect.y + 150,550, 20, tooltip_text_5, 30)
+        tooltip_6 = DialogueText(screen, tooltip_img_frame.rect.x + 30, tooltip_img_frame.rect.y + 180,550, 20, tooltip_text_6, 30)
+        tooltip_7 = DialogueText(screen, tooltip_img_frame.rect.x + 30, tooltip_img_frame.rect.y + 230,550, 20, tooltip_text_7, 30)
+        tooltip_8 = DialogueText(screen, tooltip_img_frame.rect.x + 30, tooltip_img_frame.rect.y + 260,550, 20, tooltip_text_8, 30)
+        tooltip_9 = DialogueText(screen, tooltip_img_frame.rect.x + 30, tooltip_img_frame.rect.y + 290,550, 20, tooltip_text_9, 30)
+        frame.add_element(tooltip_1)
+        frame.add_element(tooltip_2)
+        frame.add_element(tooltip_3)
+        frame.add_element(tooltip_4)
+        frame.add_element(tooltip_5)
+        frame.add_element(tooltip_6)
+        frame.add_element(tooltip_7)
+        frame.add_element(tooltip_8)
+        frame.add_element(tooltip_9)
     frame.draw()
     code_frame.draw()
 
